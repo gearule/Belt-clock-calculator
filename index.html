@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belt Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 1200px;
+        }
+        .calculator {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 45%;
+        }
+        .result-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 45%;
+        }
+        .calculator h2, .result-box h2 {
+            text-align: center;
+        }
+        .input-field {
+            margin: 10px 0;
+            width: 100%;
+        }
+        select, input[type="number"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+            white-space: pre-wrap; /* Makes sure the text appears on multiple lines */
+        }
+        .result-options {
+            background-color: #f0f0f0; /* Light gray background */
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="calculator">
+            <h2>Belt Calculator</h2>
+            
+            <label for="itemsPerMinute">Items per Minute:</label>
+            <select id="itemsPerMinute" class="input-field">
+                <option value="150">150</option>
+                <option value="165">165</option>
+                <option value="180">180</option>
+                <option value="195">195</option>
+                <option value="210">210</option>
+                <option value="240">240</option>
+                <option value="270">270</option>
+                <option value="300">300</option>
+                <option value="330">330</option>
+                <option value="375">375</option>
+                <option value="420">420</option>
+                <option value="450">450</option>
+                <option value="480">480</option>
+            </select>
+            
+            <label for="timeInSeconds">Time in Seconds (for moving items):</label>
+            <input type="number" id="timeInSeconds" class="input-field" placeholder="60" required>
+
+            <button onclick="calculateBelts()">Calculate</button>
+        </div>
+
+        <div class="result-box">
+            <h2>Results</h2>
+            <div class="result-options" id="result">The results will appear here.</div>
+        </div>
+    </div>
+
+    <script>
+        function calculateBelts() {
+            const itemsPerMinute = parseFloat(document.getElementById('itemsPerMinute').value);
+            const itemsPerBelt = 3.3; // constant value
+            const timeInSeconds = parseFloat(document.getElementById('timeInSeconds').value);
+
+            if (isNaN(itemsPerMinute) || isNaN(timeInSeconds) || timeInSeconds <= 0) {
+                document.getElementById('result').innerText = 'Please enter valid values for all fields.';
+                return;
+            }
+
+            // Calculate the number of items moved per second
+            const itemsPerSecond = itemsPerMinute / 60;
+
+            // Calculate the total number of items moved in the given time
+            const totalItems = itemsPerSecond * timeInSeconds;
+
+            // Calculate how many belts are needed
+            const beltsNeeded = totalItems / itemsPerBelt;
+
+            // Calculate the dimensions for three possibilities
+
+            // Square
+            const squareLength = beltsNeeded / 4;
+            const squareWidth = squareLength;
+
+            // Rectangle with higher length-to-width ratio
+            const rectLength1 = beltsNeeded / 4 * 3;
+            const rectWidth1 = beltsNeeded / 4;
+
+            // Rectangle with lower length-to-width ratio
+            const rectLength2 = beltsNeeded / 4 * 2;
+            const rectWidth2 = beltsNeeded / 4;
+
+            // Round the results
+            const roundedBeltsNeeded = Math.round(beltsNeeded);
+            const roundedSquareLength = Math.round(squareLength);
+            const roundedSquareWidth = Math.round(squareWidth);
+            const roundedRectLength1 = Math.round(rectLength1);
+            const roundedRectWidth1 = Math.round(rectWidth1);
+            const roundedRectLength2 = Math.round(rectLength2);
+            const roundedRectWidth2 = Math.round(rectWidth2);
+
+            // Display the result with 3 possibilities
+            document.getElementById('result').innerText = `You need approximately ${roundedBeltsNeeded} belts.\n\n` +
+                `Option 1: Square (Length = ${roundedSquareLength} units, Width = ${roundedSquareWidth} units)\n` +
+                `Option 2: Rectangle (Length = ${roundedRectLength1} units, Width = ${roundedRectWidth1} units)\n` +
+                `Option 3: Rectangle (Length = ${roundedRectLength2} units, Width = ${roundedRectWidth2} units)`;
+        }
+    </script>
+
+</body>
+</html>
